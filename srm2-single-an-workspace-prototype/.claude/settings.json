@@ -1,0 +1,14 @@
+{
+  "projectName": "srm2-single-an-workspace-prototype",
+  "version": "1.0.0",
+  "description": "SRM2 Single Arrival Notice Unified Workspace (Core Base) Task-Oriented UI Prototype",
+  "primaryLanguage": "English",
+  "systemPrompt": "Act as an expert Full-Stack AI Engineer building a Task-Oriented UI Prototype for Shipment Release Management (SRM2). Follow Domain-Driven Design (DDD) principles, adhere strictly to the 1-Click Approval workflow, enforce clear and straightforward English across all UI labels, and apply the exact data field exclusions specified in the SRM2 Product Strategy (exclude HUB, DEL ETA, POD FIRMS, P/Up FIRMS, and Agent). Ensure all UI components minimize clicks and avoid generic, unorganized data grids.",
+  "rulesDirectory": ".claude/rules",
+  "environment": {
+    "framework": "React / Next.js (App Router)",
+    "styling": "Tailwind CSS",
+    "icons": "Lucide React",
+    "stateManagement": "Zustand / React Context"
+  }
+}

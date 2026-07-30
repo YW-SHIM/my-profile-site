@@ -1,4 +1,4 @@
-# Rule 03: Language & Labeling Mandate
+# Rule 03: Language & Labeling Mandate (Complete AS-IS to Single Workspace)
 
 ## Communication Guidelines
 - Use clear, straightforward English for all UI labels, tooltips, and prompts.

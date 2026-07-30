@@ -17,19 +17,40 @@ export const LeftPanel: React.FC<LeftPanelProps> = ({ record }) => {
 
   return (
     <div className="bg-gray-50 border-r border-gray-200 p-6 w-96 overflow-y-auto">
-      {/* Customer Section */}
+      {/* Shipper Section */}
       <div className="mb-6">
         <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-          Consignee Information
+          Shipper (SHPR)
         </h3>
         <div className="space-y-2">
           <div>
-            <label className="text-xs font-medium text-gray-600">Customer Name</label>
-            <p className="text-sm font-semibold text-gray-900">{record.customerName}</p>
+            <label className="text-xs font-medium text-gray-600">Shipper Code</label>
+            <p className="text-sm font-mono text-gray-900">{record.shipperCode}</p>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-gray-600">Shipper Name</label>
+            <p className="text-sm font-semibold text-gray-900">{record.shipperName}</p>
           </div>
           <div>
             <label className="text-xs font-medium text-gray-600">Address</label>
-            <p className="text-sm text-gray-700">{record.customerAddress}</p>
+            <p className="text-sm text-gray-700">{record.shipperAddress}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Consignee Section */}
+      <div className="mb-6">
+        <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+          Consignee (CNEE) / Notify
+        </h3>
+        <div className="space-y-2">
+          <div>
+            <label className="text-xs font-medium text-gray-600">Consignee Name</label>
+            <p className="text-sm font-semibold text-gray-900">{record.consigneeName}</p>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-gray-600">Address</label>
+            <p className="text-sm text-gray-700">{record.consigneeAddress}</p>
           </div>
         </div>
       </div>

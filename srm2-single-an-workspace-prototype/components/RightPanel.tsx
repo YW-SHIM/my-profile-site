@@ -28,64 +28,125 @@ export const RightPanel: React.FC<RightPanelProps> = ({ record }) => {
     <div className="flex-1 bg-white p-6 overflow-y-auto flex flex-col">
       {/* Schedule Card */}
       <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Schedule & Delivery</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Shipment Schedule & Delivery</h2>
 
-        {/* Grid of mandatory fields */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          {/* Row 1 */}
+        {/* Grid of mandatory fields - organized in logical sections */}
+        <div className="space-y-6">
+          {/* Vessel & VVD Section */}
           <div>
-            <label className="text-xs font-medium text-gray-600">VVD</label>
-            <p className="text-sm font-semibold text-gray-900">{record.vvd}</p>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">B/L No.</label>
-            <p className="text-sm font-mono text-gray-900">{record.blNo}</p>
-          </div>
-
-          {/* Row 2 */}
-          <div>
-            <label className="text-xs font-medium text-gray-600">Delivery Term</label>
-            <p className="text-sm font-semibold text-gray-900">{record.deliveryTerm}</p>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">Container Type</label>
-            <p className="text-sm font-semibold text-gray-900">{record.cntrType}</p>
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">
+              Vessel Information
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600">VVD</label>
+                <p className="text-sm font-semibold text-gray-900">{record.vvd}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">T/VVD</label>
+                <p className="text-sm font-semibold text-gray-900">{record.vvd}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Row 3 */}
+          {/* Booking & Document Section */}
           <div>
-            <label className="text-xs font-medium text-gray-600">Place of Delivery</label>
-            <p className="text-sm text-gray-900">{record.del}</p>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">POD ETA</label>
-            <p className="text-sm text-gray-900">{record.podEta}</p>
-          </div>
-
-          {/* Row 4 */}
-          <div>
-            <label className="text-xs font-medium text-gray-600">Available Date</label>
-            <p className="text-sm font-semibold text-green-700">{record.availableDate}</p>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">Last Free Date</label>
-            <p className="text-sm font-semibold text-orange-700">{record.lastFreeDate}</p>
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">
+              Booking Details
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600">B/L No.</label>
+                <p className="text-sm font-mono text-gray-900">{record.blNo}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Form Type</label>
+                <p className="text-sm text-gray-900">{record.formType}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Row 5 */}
+          {/* Port & Delivery Section */}
           <div>
-            <label className="text-xs font-medium text-gray-600">Pickup CY/CFS</label>
-            <p className="text-sm text-gray-900">{record.pickupYard}</p>
-          </div>
-          <div>
-            <label className="text-xs font-medium text-gray-600">Return CY</label>
-            <p className="text-sm text-gray-900">{record.returnYard}</p>
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">
+              Port & Location
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600">POD (Discharge Port)</label>
+                <p className="text-sm text-gray-900">-</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">POL (Loading Port)</label>
+                <p className="text-sm text-gray-900">-</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Place of Delivery</label>
+                <p className="text-sm text-gray-900">{record.del}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Delivery Term</label>
+                <p className="text-sm font-semibold text-gray-900">{record.deliveryTerm}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Row 6 */}
+          {/* Dates Section */}
           <div>
-            <label className="text-xs font-medium text-gray-600">Form Type</label>
-            <p className="text-sm text-gray-900">{record.formType}</p>
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">
+              Critical Dates
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600">Sail Date</label>
+                <p className="text-sm font-semibold text-gray-900">-</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">POD ETA</label>
+                <p className="text-sm font-semibold text-gray-900">{record.podEta}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Available Date</label>
+                <p className="text-sm font-semibold text-green-700">{record.availableDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Last Free Date</label>
+                <p className="text-sm font-semibold text-orange-700">{record.lastFreeDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">CY Cut Off</label>
+                <p className="text-sm text-gray-900">{record.lastFreeDate}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">ERD</label>
+                <p className="text-sm text-gray-900">-</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Cargo & Container Section */}
+          <div>
+            <h3 className="text-xs font-semibold text-gray-600 uppercase tracking-wider mb-3">
+              Container & Cargo
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-gray-600">Container Type</label>
+                <p className="text-sm font-semibold text-gray-900">{record.cntrType}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Volume</label>
+                <p className="text-sm text-gray-900">1.0</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Pickup CY/CFS</label>
+                <p className="text-sm text-gray-900">{record.pickupYard}</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-gray-600">Return CY</label>
+                <p className="text-sm text-gray-900">{record.returnYard}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -5,14 +5,19 @@ interface ArrivalNoticeStore {
   records: ArrivalNoticeRecord[];
   archivedRecords: ArrivalNoticeRecord[];
   selectedRecord: ArrivalNoticeRecord | null;
+  selectedRecordIds: string[];
   isApproving: boolean;
   approvalProgress: 'Pending' | 'Sending...' | 'Dispatched';
 
   // Actions
   setRecords: (records: ArrivalNoticeRecord[]) => void;
   selectRecord: (record: ArrivalNoticeRecord) => void;
+  toggleRecordSelection: (recordId: string) => void;
+  toggleAllRecordSelection: () => void;
+  clearSelection: () => void;
   updateRemark: (remark: string) => void;
   approveAndSendArrivalNotice: () => Promise<void>;
+  approveAndMassSendArrivalNotices: () => Promise<void>;
   simulateKafkaCDCSync: (blNo: string) => Promise<void>;
   archiveRecord: (blNo: string) => void;
   openOpusScreen: (blNo: string) => void;
@@ -22,12 +27,32 @@ export const useArrivalNoticeStore = create<ArrivalNoticeStore>((set, get) => ({
   records: [],
   archivedRecords: [],
   selectedRecord: null,
+  selectedRecordIds: [],
   isApproving: false,
   approvalProgress: 'Pending',
 
   setRecords: (records) => set({ records }),
 
   selectRecord: (record) => set({ selectedRecord: record }),
+
+  toggleRecordSelection: (recordId) =>
+    set((state) => {
+      const newIds = state.selectedRecordIds.includes(recordId)
+        ? state.selectedRecordIds.filter((id) => id !== recordId)
+        : [...state.selectedRecordIds, recordId];
+      return { selectedRecordIds: newIds };
+    }),
+
+  toggleAllRecordSelection: () =>
+    set((state) => {
+      const pendingRecords = state.records.filter((r) => r.status === 'PENDING');
+      if (state.selectedRecordIds.length === pendingRecords.length) {
+        return { selectedRecordIds: [] };
+      }
+      return { selectedRecordIds: pendingRecords.map((r) => r.id) };
+    }),
+
+  clearSelection: () => set({ selectedRecordIds: [] }),
 
   updateRemark: (remark) =>
     set((state) => ({
@@ -63,6 +88,31 @@ export const useArrivalNoticeStore = create<ArrivalNoticeStore>((set, get) => ({
     await get().archiveRecord(selectedRecord.blNo);
 
     set({ isApproving: false, approvalProgress: 'Pending' });
+  },
+
+  approveAndMassSendArrivalNotices: async () => {
+    const { records, selectedRecordIds } = get();
+    if (selectedRecordIds.length === 0) return;
+
+    set({ isApproving: true, approvalProgress: 'Pending' });
+    set({ approvalProgress: 'Sending...' });
+
+    const recordsToProcess = records.filter((r) => selectedRecordIds.includes(r.id));
+    const totalCount = recordsToProcess.length;
+
+    for (let i = 0; i < recordsToProcess.length; i++) {
+      const record = recordsToProcess[i];
+      await get().simulateKafkaCDCSync(record.blNo);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      await get().archiveRecord(record.blNo);
+    }
+
+    set({ approvalProgress: 'Dispatched' });
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
+    set({ selectedRecordIds: [], isApproving: false, approvalProgress: 'Pending' });
+
+    console.log(`[Mass Approval] Successfully dispatched ${totalCount} Arrival Notices`);
   },
 
   simulateKafkaCDCSync: async (blNo: string) => {

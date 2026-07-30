@@ -74,6 +74,9 @@ export const MOCK_ARRIVAL_NOTICES: ArrivalNoticeRecord[] = [
     purchaseOrderNo: 'PO-2026-001',
     shipmentControlNo: 'SC-SH-001',
 
+    // Customs & Inspection
+    customsSeq: 'HODT0010E/MELG028183300-001',
+
     // Notification & Status
     anSent: 'NO',
     yesNoDecision: 'Y',
@@ -158,6 +161,9 @@ export const MOCK_ARRIVAL_NOTICES: ArrivalNoticeRecord[] = [
     purchaseOrderNo: 'PO-2026-002',
     shipmentControlNo: 'SC-NB-002',
 
+    // Customs & Inspection
+    customsSeq: 'HODT0010E/SHAGP4762900-001',
+
     // Notification & Status
     anSent: 'NO',
     yesNoDecision: 'Y',
@@ -241,6 +247,9 @@ export const MOCK_ARRIVAL_NOTICES: ArrivalNoticeRecord[] = [
     // Order & Reference Numbers
     purchaseOrderNo: 'PO-2026-003',
     shipmentControlNo: 'SC-XM-003',
+
+    // Customs & Inspection
+    customsSeq: 'SEQT2618E/MVDG911312500-001',
 
     // Notification & Status
     anSent: 'NO',

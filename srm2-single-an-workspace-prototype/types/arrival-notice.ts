@@ -72,6 +72,9 @@ export interface ArrivalNoticeRecord {
   purchaseOrderNo?: string;
   shipmentControlNo?: string;
 
+  // Customs & Inspection (NEW)
+  customsSeq?: string;
+
   // Notification & Status
   anSent?: 'YES' | 'NO';
   yesNoDecision?: 'Y' | 'N';

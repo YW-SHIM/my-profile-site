@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YW SHIM - Product Owner Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gradient-to-br from-sky-50 via-sky-100 to-white text-slate-800">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-sky-50/90 backdrop-blur-md border-b border-sky-200 z-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="#hero" class="text-xl font-bold bg-gradient-to-r from-pink-500 to-fuchsia-500 bg-clip-text text-transparent">
+                    YW SHIM
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex gap-8">
+                <a href="#about" class="text-slate-600 hover:text-pink-500 transition-colors text-sm">About</a>
+                <a href="#skills" class="text-slate-600 hover:text-pink-500 transition-colors text-sm">Skills</a>
+                <a href="#portfolio" class="text-slate-600 hover:text-pink-500 transition-colors text-sm">Portfolio</a>
+                <a href="#contact" class="text-slate-600 hover:text-pink-500 transition-colors text-sm">Contact</a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menuBtn" class="md:hidden p-2 hover:bg-sky-200 rounded-lg transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden border-t border-sky-200 bg-sky-50">
+            <div class="px-4 py-2 space-y-2">
+                <a href="#about" class="block px-4 py-2 text-slate-600 hover:text-pink-500 hover:bg-sky-200/50 rounded-lg transition-colors">About</a>
+                <a href="#skills" class="block px-4 py-2 text-slate-600 hover:text-pink-500 hover:bg-sky-200/50 rounded-lg transition-colors">Skills</a>
+                <a href="#portfolio" class="block px-4 py-2 text-slate-600 hover:text-pink-500 hover:bg-sky-200/50 rounded-lg transition-colors">Portfolio</a>
+                <a href="#contact" class="block px-4 py-2 text-slate-600 hover:text-pink-500 hover:bg-sky-200/50 rounded-lg transition-colors">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-16 px-4 relative overflow-hidden">
+        <!-- Background Gradient -->
+        <div class="absolute inset-0 -z-10">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl opacity-50"></div>
+        </div>
+
+        <div class="max-w-2xl mx-auto text-center fade-in">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6">
+                YW SHIM
+            </h1>
+            <p class="text-xl sm:text-2xl text-pink-500 mb-4 font-semibold">
+                Proxy Product Owner
+            </p>
+            <p class="text-lg text-zinc-400 mb-8">
+                Chorus PJ - Agile Scrum & Inbound Documentation
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#contact" class="px-8 py-3 bg-gradient-to-r from-pink-500 to-fuchsia-500 rounded-lg font-semibold hover:from-pink-600 hover:to-fuchsia-600 transition-all transform hover:scale-105">
+                    Get in Touch
+                </a>
+                <a href="#portfolio" class="px-8 py-3 border border-pink-500 text-pink-500 rounded-lg font-semibold hover:bg-pink-500/10 transition-all">
+                    View Portfolio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4 bg-white/40">
+        <div class="max-w-3xl mx-auto fade-in">
+            <h2 class="text-4xl font-bold mb-8 pb-4 border-b border-pink-500/30">
+                About Me
+            </h2>
+            <div class="space-y-6 text-slate-700">
+                <p class="text-lg leading-relaxed">
+                    I am currently serving as a <span class="text-pink-500 font-semibold">Proxy Product Owner in the Chorus Project</span>,
+                    working within an Agile Scrum environment.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    My focus is on the <span class="text-pink-500 font-semibold">BKG and Shipment release project</span>, where I function as
+                    an <span class="text-pink-500 font-semibold">Inbound Documentation SME (Subject Matter Expert)</span>. In this role,
+                    I assist the Product Owner in bridging documentation requirements, logistics coordination, and agile delivery processes.
+                </p>
+                <p class="text-lg leading-relaxed">
+                    My expertise lies in understanding complex organizational needs, translating them into actionable requirements,
+                    and ensuring seamless collaboration across cross-functional teams.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 px-4">
+        <div class="max-w-3xl mx-auto fade-in">
+            <h2 class="text-4xl font-bold mb-12 pb-4 border-b border-pink-500/30">
+                Technical Skills
+            </h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">HTML</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">CSS</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">Tailwind CSS</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">Next.js</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">Node.js</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+                <div class="group px-4 py-3 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 hover:bg-white transition-all duration-300">
+                    <p class="text-slate-800 font-semibold group-hover:text-pink-500 transition-colors">React</p>
+                    <div class="mt-2 inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-full">
+                        <svg class="w-4 h-4 text-white bg-emerald-500 rounded-full p-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="text-xs font-medium text-emerald-700">보유중</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 px-4 bg-white/40">
+        <div class="max-w-3xl mx-auto fade-in">
+            <h2 class="text-4xl font-bold mb-12 pb-4 border-b border-pink-500/30">
+                Portfolio
+            </h2>
+            <div class="space-y-6">
+                <!-- Project Card -->
+                <div class="group p-6 bg-white/60 border border-sky-200 rounded-lg hover:border-pink-500/50 transition-all duration-300 hover:shadow-lg hover:shadow-pink-500/10">
+                    <h3 class="text-2xl font-bold text-slate-800 mb-2 group-hover:text-pink-500 transition-colors">
+                        Brownfield Project (BKG & Shipment)
+                    </h3>
+                    <p class="text-slate-600 mb-4">
+                        Leading inbound documentation and process optimization for BKG and Shipment release initiative within the Chorus Project ecosystem.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 text-sm bg-pink-500/20 text-pink-300 rounded-full border border-pink-500/30">
+                            Agile/Scrum
+                        </span>
+                        <span class="px-3 py-1 text-sm bg-pink-500/20 text-pink-300 rounded-full border border-pink-500/30">
+                            Documentation
+                        </span>
+                        <span class="px-3 py-1 text-sm bg-pink-500/20 text-pink-300 rounded-full border border-pink-500/30">
+                            Product Ownership
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <p class="text-center text-slate-500 text-sm mt-8">More projects coming soon...</p>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-4">
+        <div class="max-w-3xl mx-auto text-center fade-in">
+            <h2 class="text-4xl font-bold mb-12 pb-4 border-b border-pink-500/30 inline-block">
+                Get in Touch
+            </h2>
+            <p class="text-lg text-slate-600 mb-8">
+                Feel free to reach out for collaborations or just a friendly hello
+            </p>
+            <div class="space-y-6">
+                <a href="mailto:flexi@gamil.com" class="inline-block px-8 py-4 bg-gradient-to-r from-pink-500 to-fuchsia-500 rounded-lg font-semibold hover:from-pink-600 hover:to-fuchsia-600 transition-all transform hover:scale-105">
+                    Email: flexi@gamil.com
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-sky-200 py-6 px-4 bg-white/40">
+        <div class="max-w-4xl mx-auto text-center text-slate-500 text-sm">
+            <p>&copy; 2025 YW SHIM. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

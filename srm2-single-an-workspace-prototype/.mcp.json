@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "google-drive": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "servers/google-drive-server.js"
+      ],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "./gcp-oauth.keys.json"
+      }
+    }
+  }
+}

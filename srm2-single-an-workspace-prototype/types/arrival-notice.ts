@@ -74,12 +74,16 @@ export interface ArrivalNoticeRecord {
 
   // Customs & Inspection (NEW)
   customsSeq?: string;
+  importManifestNo?: string;
+  agent?: string;
 
   // Notification & Status
   anSent?: 'YES' | 'NO';
   yesNoDecision?: 'Y' | 'N';
   reviseFlag?: boolean;
+  chgFlag?: boolean;
   type?: 'CNEE' | 'NTFY';
+  language?: string;
 
   // Common
   remark: string;

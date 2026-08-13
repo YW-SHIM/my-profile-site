@@ -1,0 +1,33 @@
+{
+  "projectFolders": {
+    "main": {
+      "name": "SRM2-Project-Resources",
+      "folderId": "1U1xE0HCfC98DW09Eaf7UQhd2bKe7oihF",
+      "description": "Main project resources folder"
+    },
+    "documentation": {
+      "name": "Documentation",
+      "folderId": "1KmY3s9ScEAaT0nTM5KBB3tZcIi5pPvq9",
+      "description": "프로젝트 문서 및 명세서"
+    },
+    "design": {
+      "name": "Design-Assets",
+      "folderId": "1FRmB0FA0kDYiFoi4ajjVhU2PaPWCsd_g",
+      "description": "UI/UX 디자인 자료"
+    },
+    "code": {
+      "name": "Code-References",
+      "folderId": "1IMkYfzEFoyZy_Wy0BkpB0dnsMdCouLQq",
+      "description": "코드 샘플 및 참고자료"
+    },
+    "research": {
+      "name": "Research",
+      "folderId": "1nE5iTtQY1_-G4id6JwYEvp78oQLJscfQ",
+      "description": "조사 자료 및 분석"
+    }
+  },
+  "settings": {
+    "pageSize": 10,
+    "orderBy": "modifiedTime desc"
+  }
+}

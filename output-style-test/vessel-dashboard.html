@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vessel Schedule Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f1419;
+            color: #e0e0e0;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: #1a1f26;
+            border: 1px solid #2a3038;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #4da6ff;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .table-section {
+            background: #1a1f26;
+            border: 1px solid #2a3038;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #242a33;
+            padding: 16px 24px;
+            border-bottom: 1px solid #2a3038;
+        }
+
+        .table-header h2 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            background: #242a33;
+        }
+
+        th {
+            padding: 12px 24px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #2a3038;
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid #2a3038;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #232a35;
+        }
+
+        .vessel-name {
+            font-weight: 600;
+            color: #4da6ff;
+        }
+
+        .status-active {
+            background: #1a3a1a;
+            color: #4dff4d;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #3a3a1a;
+            color: #ffff4d;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-completed {
+            background: #1a2a3a;
+            color: #4da6ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .port {
+            color: #b0b0b0;
+        }
+
+        .eta {
+            color: #a0a0a0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #2a3038;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4da6ff, #4dff4d);
+            transition: width 0.3s ease;
+        }
+
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: #606070;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚢 Vessel Schedule Dashboard</h1>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value">12</div>
+                <div class="stat-label">Active Vessels</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">45</div>
+                <div class="stat-label">Total Schedules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">38</div>
+                <div class="stat-label">On Schedule</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">7</div>
+                <div class="stat-label">Delays</div>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-header">
+                <h2>Current Vessel Operations</h2>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Vessel Name</th>
+                        <th>Current Port</th>
+                        <th>Next Port</th>
+                        <th>ETA</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="vessel-name">CL PIONEER</td>
+                        <td class="port">Shanghai</td>
+                        <td class="port">Singapore</td>
+                        <td class="eta">2026-07-18</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vessel-name">GLOBAL GRACE</td>
+                        <td class="port">Singapore</td>
+                        <td class="port">Hong Kong</td>
+                        <td class="eta">2026-07-20</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 45%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vessel-name">EVER GIVEN</td>
+                        <td class="port">Rotterdam</td>
+                        <td class="port">Hamburg</td>
+                        <td class="eta">2026-07-16</td>
+                        <td><span class="status-completed">Completed</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vessel-name">MAERSK SEALAND</td>
+                        <td class="port">Los Angeles</td>
+                        <td class="port">Long Beach</td>
+                        <td class="eta">2026-07-22</td>
+                        <td><span class="status-pending">Pending</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 15%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vessel-name">OOCL COURAGE</td>
+                        <td class="port">Dubai</td>
+                        <td class="port">Mumbai</td>
+                        <td class="eta">2026-07-19</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 72%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="vessel-name">COSCO UNIVERSE</td>
+                        <td class="port">Busan</td>
+                        <td class="port">Shanghai</td>
+                        <td class="eta">2026-07-17</td>
+                        <td><span class="status-active">Active</span></td>
+                        <td>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            Last updated: 2026-07-14 14:30 UTC
+        </div>
+    </div>
+</body>
+</html>

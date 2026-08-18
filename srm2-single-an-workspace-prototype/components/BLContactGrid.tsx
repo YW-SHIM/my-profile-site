@@ -3,41 +3,57 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Settings } from 'lucide-react';
 import { useArrivalNoticeStore } from '@/store/arrival-notice-store';
-import { ArrivalNoticeRecord } from '@/types/arrival-notice';
+import { ArrivalNoticeRecord, CARGO_NATURE_OPTIONS } from '@/types/arrival-notice';
 import { SectionHeader } from './SectionHeader';
 
-interface ToggleColumnDef {
-  key: keyof ArrivalNoticeRecord;
-  label: string;
-}
+type ToggleColumnDef =
+  | { id: string; key: keyof ArrivalNoticeRecord; label: string; kind: 'text' }
+  | { id: string; label: string; kind: 'contact'; emailKey: keyof ArrivalNoticeRecord; faxKey: keyof ArrivalNoticeRecord }
+  | { id: string; key: keyof ArrivalNoticeRecord; label: string; kind: 'select'; options: readonly string[] };
 
 const TOGGLE_COLUMNS: ToggleColumnDef[] = [
-  { key: 'anSent', label: 'A/N SENT' },
-  { key: 'contactEmail', label: 'CNEE/NTFY' },
-  { key: 'consigneeEmail2', label: 'CNEE/NTFY #2' },
-  { key: 'broker1', label: 'BROKER #1' },
-  { key: 'broker2', label: 'BROKER #2' },
-  { key: 'pod', label: 'POD' },
-  { key: 'del', label: 'DEL' },
-  { key: 'cargoNature', label: 'TYPE' },
-  { key: 'deliveryTerm', label: 'TERM' },
-  { key: 'formType', label: 'A/N FORM' },
-  { key: 'language', label: 'LANGUAGE' },
+  { id: 'anSent', key: 'anSent', label: 'A/N SENT', kind: 'text' },
+  { id: 'cneeNtfy', label: 'CNEE/NTFY', kind: 'contact', emailKey: 'contactEmail', faxKey: 'contactFax' },
+  { id: 'cneeNtfy2', label: 'CNEE/NTFY #2', kind: 'contact', emailKey: 'consigneeEmail2', faxKey: 'consigneeFax2' },
+  { id: 'broker1', label: 'BROKER #1', kind: 'contact', emailKey: 'broker1Email', faxKey: 'broker1Fax' },
+  { id: 'broker2', label: 'BROKER #2', kind: 'contact', emailKey: 'broker2Email', faxKey: 'broker2Fax' },
+  { id: 'pod', key: 'pod', label: 'POD', kind: 'text' },
+  { id: 'del', key: 'del', label: 'DEL', kind: 'text' },
+  { id: 'cargoNature', key: 'cargoNature', label: 'TYPE', kind: 'select', options: CARGO_NATURE_OPTIONS },
+  { id: 'deliveryTerm', key: 'deliveryTerm', label: 'TERM', kind: 'text' },
+  { id: 'formType', key: 'formType', label: 'A/N FORM', kind: 'text' },
+  { id: 'language', key: 'language', label: 'LANGUAGE', kind: 'text' },
 ];
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FAX_REGEX = /^\+?\d{1,3}-\d{1,4}-\d{3,4}-\d{4}$/;
 
 const ACTION_BUTTONS = ['Undo', 'Retrieve', 'Down Excel', 'Save', 'Code Validate', 'E-Mail', 'Preview', 'Print', 'History'];
 
 export function BLContactGrid() {
-  const { filteredRecords, selectedRecordIds, toggleRecordSelection, draftEdits } = useArrivalNoticeStore();
+  const {
+    filteredRecords,
+    selectedRecordIds,
+    toggleRecordSelection,
+    draftEdits,
+    updateDraftEdit,
+    toggleAllChgFlags,
+    saveGridEdits,
+    undoGridEdits,
+  } = useArrivalNoticeStore();
   const [showConfig, setShowConfig] = useState(false);
-  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(TOGGLE_COLUMNS.map((c) => c.key)));
+  const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set(TOGGLE_COLUMNS.map((c) => c.id)));
   const [pendingColumns, setPendingColumns] = useState<Set<string>>(visibleColumns);
   const [pageSize, setPageSize] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
+  const [contactMode, setContactMode] = useState<'EMAIL' | 'FAX'>('EMAIL');
 
   const totalPages = Math.max(1, Math.ceil(filteredRecords.length / pageSize));
 
-  const toggleColumns = TOGGLE_COLUMNS.filter((c) => visibleColumns.has(c.key));
+  const toggleColumns = TOGGLE_COLUMNS.filter((c) => visibleColumns.has(c.id));
+  const isRowChgTicked = (record: ArrivalNoticeRecord) =>
+    Boolean(draftEdits[record.id]?.chgFlag ?? record.chgFlag ?? false);
+  const allChgTicked = filteredRecords.length > 0 && filteredRecords.every(isRowChgTicked);
   const allVisibleSelected =
     filteredRecords.length > 0 && filteredRecords.every((r) => selectedRecordIds.includes(r.id));
 
@@ -67,10 +83,10 @@ export function BLContactGrid() {
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-gray-100">
           <div className="flex items-center gap-4 text-xs font-semibold text-gray-600">
             <label className="flex items-center gap-1">
-              <input type="checkbox" defaultChecked /> E-Mail
+              <input type="checkbox" checked={contactMode === 'EMAIL'} onChange={() => setContactMode('EMAIL')} /> E-Mail
             </label>
             <label className="flex items-center gap-1">
-              <input type="checkbox" /> Fax
+              <input type="checkbox" checked={contactMode === 'FAX'} onChange={() => setContactMode('FAX')} /> Fax
             </label>
             <label className="flex items-center gap-1">
               A/N Status
@@ -85,6 +101,7 @@ export function BLContactGrid() {
             {ACTION_BUTTONS.map((label) => (
               <button
                 key={label}
+                onClick={label === 'Save' ? saveGridEdits : label === 'Undo' ? undoGridEdits : undefined}
                 className={`px-2.5 py-1.5 text-xs font-semibold rounded border ${
                   label === 'Undo'
                     ? 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
@@ -115,14 +132,19 @@ export function BLContactGrid() {
                 <th className="px-2 py-2 text-left font-semibold">
                   <input type="checkbox" checked={allVisibleSelected} onChange={toggleAllVisible} />
                 </th>
-                <th className="px-2 py-2 text-left font-semibold">CHG</th>
+                <th className="px-2 py-2 text-left font-semibold">
+                  <label className="flex items-center gap-1">
+                    <input type="checkbox" checked={allChgTicked} onChange={toggleAllChgFlags} />
+                    CHG
+                  </label>
+                </th>
                 <th className="px-2 py-2 text-left font-semibold whitespace-nowrap">IMPORT MANIFEST NO</th>
                 <th className="px-2 py-2 text-left font-semibold">BL NO.</th>
                 <th className="px-2 py-2 text-left font-semibold">TP</th>
                 <th className="px-2 py-2 text-left font-semibold">CODE</th>
                 <th className="px-2 py-2 text-left font-semibold whitespace-nowrap">CUSTOMER NAME</th>
                 {toggleColumns.map((col) => (
-                  <th key={col.key} className="px-2 py-2 text-left font-semibold whitespace-nowrap">
+                  <th key={col.id} className="px-2 py-2 text-left font-semibold whitespace-nowrap">
                     {col.label}
                   </th>
                 ))}
@@ -131,7 +153,7 @@ export function BLContactGrid() {
             <tbody>
               {filteredRecords.map((record, index) => {
                 const isSelected = selectedRecordIds.includes(record.id);
-                const isChanged = Boolean(draftEdits[record.id]);
+                const isChgTicked = isRowChgTicked(record);
                 return (
                   <tr key={record.id} className={`border-t border-gray-100 hover:bg-gray-50 ${isSelected ? 'bg-pink-50/60' : ''}`}>
                     <td className="px-2 py-2 text-gray-500">{index + 1}</td>
@@ -139,18 +161,60 @@ export function BLContactGrid() {
                       <input type="checkbox" checked={isSelected} onChange={() => toggleRecordSelection(record.id)} />
                     </td>
                     <td className="px-2 py-2">
-                      <input type="checkbox" checked={isChanged} readOnly />
+                      <input
+                        type="checkbox"
+                        checked={isChgTicked}
+                        onChange={() => updateDraftEdit(record.id, 'chgFlag', !isChgTicked)}
+                      />
                     </td>
                     <td className="px-2 py-2 whitespace-nowrap">{record.importManifestNo ?? '—'}</td>
                     <td className="px-2 py-2 whitespace-nowrap font-medium text-gray-800">{record.blNo}</td>
                     <td className="px-2 py-2">{record.type === 'CNEE' ? 'C' : 'N'}</td>
                     <td className="px-2 py-2 whitespace-nowrap">{record.customerCode}</td>
                     <td className="px-2 py-2 whitespace-nowrap">{record.consigneeName}</td>
-                    {toggleColumns.map((col) => (
-                      <td key={col.key} className="px-2 py-2 whitespace-nowrap text-gray-700">
-                        {String(record[col.key] ?? '')}
-                      </td>
-                    ))}
+                    {toggleColumns.map((col) => {
+                      if (col.kind === 'text') {
+                        return (
+                          <td key={col.id} className="px-2 py-2 whitespace-nowrap text-gray-700">
+                            {String(record[col.key] ?? '')}
+                          </td>
+                        );
+                      }
+                      if (col.kind === 'select') {
+                        const value = String(draftEdits[record.id]?.[col.key] ?? record[col.key] ?? '');
+                        return (
+                          <td key={col.id} className="px-2 py-2 whitespace-nowrap">
+                            <select
+                              value={value}
+                              onChange={(e) => updateDraftEdit(record.id, col.key, e.target.value)}
+                              className="px-1.5 py-1 border border-gray-300 rounded text-xs bg-white"
+                            >
+                              {col.options.map((option) => (
+                                <option key={option} value={option}>
+                                  {option}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                        );
+                      }
+                      const activeKey = contactMode === 'EMAIL' ? col.emailKey : col.faxKey;
+                      const value = String(draftEdits[record.id]?.[activeKey] ?? record[activeKey] ?? '');
+                      const formatRegex = contactMode === 'EMAIL' ? EMAIL_REGEX : FAX_REGEX;
+                      const isValid = value === '' || formatRegex.test(value);
+                      return (
+                        <td key={col.id} className="px-2 py-2 whitespace-nowrap">
+                          <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => updateDraftEdit(record.id, activeKey, e.target.value)}
+                            className={`w-full min-w-[9rem] px-1.5 py-1 border rounded text-xs ${
+                              isValid ? 'border-gray-200' : 'border-red-400'
+                            }`}
+                          />
+                        </td>
+                      );
+                    })}
                   </tr>
                 );
               })}
@@ -228,17 +292,17 @@ export function BLContactGrid() {
           <div className="px-3 py-2 max-h-64 overflow-y-auto">
             <p className="text-[11px] font-semibold text-gray-500 mb-1">Show / Hide Columns</p>
             {TOGGLE_COLUMNS.map((col) => (
-              <label key={col.key} className="flex items-center justify-between py-1 text-xs text-gray-700">
+              <label key={col.id} className="flex items-center justify-between py-1 text-xs text-gray-700">
                 {col.label}
                 <input
                   type="checkbox"
                   className="accent-pink-600"
-                  checked={pendingColumns.has(col.key)}
+                  checked={pendingColumns.has(col.id)}
                   onChange={(e) =>
                     setPendingColumns((prev) => {
                       const next = new Set(prev);
-                      if (e.target.checked) next.add(col.key);
-                      else next.delete(col.key);
+                      if (e.target.checked) next.add(col.id);
+                      else next.delete(col.id);
                       return next;
                     })
                   }
@@ -248,7 +312,7 @@ export function BLContactGrid() {
           </div>
           <div className="px-3 py-2 border-t border-gray-100 flex justify-end gap-2">
             <button
-              onClick={() => setPendingColumns(new Set(TOGGLE_COLUMNS.map((c) => c.key)))}
+              onClick={() => setPendingColumns(new Set(TOGGLE_COLUMNS.map((c) => c.id)))}
               className="px-3 py-1 text-xs font-semibold text-gray-500 hover:text-gray-700"
             >
               Reset

@@ -74,17 +74,17 @@ const ROW_SEEDS: RowSeed[] = [
   { seq: 16, vvd: 'ITYT0009E', blNo: 'AKLG00133600', tp: 'C', customerCode: 'KR521838', consigneeName: 'NEW ZEALAND SALT CO, LTD' },
 ];
 
-const BROKERS: [string, string][] = [
-  ['HB CORPORATION', 'WORLD BEST LOGISTICS'],
-  ['HYUNDAI NAVIS', 'DHL GLOBAL FORWARDING'],
-  ['CARGO STAR', 'KINTETSU WORLD EXPRESS'],
+const BROKER_SLUGS: [string, string][] = [
+  ['hbcorp', 'wbl'],
+  ['hyundainavis', 'dhlgf'],
+  ['cargostar', 'kwe'],
 ];
 
 const manifestPrefix = (vvd: VvdKey) => vvd.slice(0, 4);
 
 export const MOCK_ARRIVAL_NOTICES: ArrivalNoticeRecord[] = ROW_SEEDS.map((seed, index) => {
   const schedule = VVD_SCHEDULE[seed.vvd];
-  const [broker1, broker2] = BROKERS[index % BROKERS.length];
+  const [brokerSlug1, brokerSlug2] = BROKER_SLUGS[index % BROKER_SLUGS.length];
   const matchStatus: ArrivalNoticeRecord['matchStatus'] =
     seed.tp === 'N' ? 'AI_Suggested' : index % 5 === 4 ? 'Unmatched' : 'Matched';
   const confidenceScore =
@@ -145,10 +145,12 @@ export const MOCK_ARRIVAL_NOTICES: ArrivalNoticeRecord[] = ROW_SEEDS.map((seed, 
 
     contactEmail: `contact@${seed.blNo.toLowerCase()}.com`,
     contactFax: '+82-51-000-0000',
-    consigneeEmail: `${seed.blNo.toLowerCase()}@cnee.com`,
     consigneeEmail2: `${seed.blNo.toLowerCase()}@ntfy.com`,
-    broker1,
-    broker2,
+    consigneeFax2: '+82-51-000-0001',
+    broker1Email: `ops@${brokerSlug1}.com`,
+    broker1Fax: '+82-2-100-0000',
+    broker2Email: `ops@${brokerSlug2}.com`,
+    broker2Fax: '+82-2-200-0000',
     oneTimeOnly: false,
 
     purchaseOrderNo: `PO-2026-${String(seed.seq).padStart(3, '0')}`,

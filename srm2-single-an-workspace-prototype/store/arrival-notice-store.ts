@@ -63,9 +63,10 @@ interface ArrivalNoticeStore {
   retrieveRecords: () => void;
 
   // Section 2: Inline grid draft edits (Undo/Save)
-  updateDraftEdit: (recordId: string, field: keyof ArrivalNoticeRecord, value: string) => void;
+  updateDraftEdit: <K extends keyof ArrivalNoticeRecord>(recordId: string, field: K, value: ArrivalNoticeRecord[K]) => void;
   undoGridEdits: () => void;
   saveGridEdits: () => void;
+  toggleAllChgFlags: () => void;
 }
 
 const applyFilters = (records: ArrivalNoticeRecord[], filters: TargetFilters): ArrivalNoticeRecord[] => {
@@ -269,5 +270,17 @@ export const useArrivalNoticeStore = create<ArrivalNoticeStore>((set, get) => ({
         filteredRecords: state.filteredRecords.map(applyEdits),
         draftEdits: {},
       };
+    }),
+
+  toggleAllChgFlags: () =>
+    set((state) => {
+      const isTicked = (record: ArrivalNoticeRecord) =>
+        state.draftEdits[record.id]?.chgFlag ?? record.chgFlag ?? false;
+      const allTicked = state.filteredRecords.length > 0 && state.filteredRecords.every(isTicked);
+      const nextDraftEdits = { ...state.draftEdits };
+      state.filteredRecords.forEach((record) => {
+        nextDraftEdits[record.id] = { ...nextDraftEdits[record.id], chgFlag: !allTicked };
+      });
+      return { draftEdits: nextDraftEdits };
     }),
 }));

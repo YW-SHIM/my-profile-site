@@ -1,3 +1,5 @@
+export const CARGO_NATURE_OPTIONS = ['General', 'Hazardous', 'Reefer', 'Perishable', 'Live Animal', 'Out of Gauge'] as const;
+
 export interface ArrivalNoticeRecord {
   id: string;
 
@@ -62,10 +64,12 @@ export interface ArrivalNoticeRecord {
   // Contact Information (Screen 4)
   contactEmail: string;
   contactFax: string;
-  consigneeEmail?: string;
   consigneeEmail2?: string;
-  broker1?: string;
-  broker2?: string;
+  consigneeFax2?: string;
+  broker1Email?: string;
+  broker1Fax?: string;
+  broker2Email?: string;
+  broker2Fax?: string;
   oneTimeOnly?: boolean;
 
   // Order & Reference Numbers

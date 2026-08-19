@@ -28,7 +28,7 @@
 |---|---|---|---|
 | 1 | 기본 검색 VVD+POD, 옵션 필터(ETA From/To, Customer Code, POL, DEL, B/L No.) | ⚠️ 주의 | `TargetSelectorBar.tsx`에 VVD/POD/POD ETA 범위/B/L No./Container Type/Customer Type/DEL 입력 UI는 존재. 하지만 store의 `applyFilters`(`store/arrival-notice-store.ts:71-81`)는 `selectedVvds`, `pod`, `blNoSearch`, `containerTypeFilter`, `anStatusFilter`, `delFilter`만 실제로 필터링에 반영하며, **POD ETA 범위·Customer Code·POL·T/S·S/C No.는 상태로만 수집되고 실제 필터 로직에는 미적용** |
 | 2 | 그리드 최대 100건/페이지, 컴팩트 행높이(~32px), Checkbox/Seq/B/L No. 컬럼 고정(freeze) | ⚠️ 주의 (2026-08-13 개선) | `BLContactGrid.tsx` 하단에 mockup(p.17)과 동일한 형태의 페이지네이션 바(이전/다음 화살표, 페이지 번호, Items per page 선택, Total 표시) 추가 완료. 기본 페이지당 100건 유지, mock 데이터는 16건 그대로(사용자 확정) — 페이지당 건수를 10/50으로 낮추면 실제 페이지 이동 동작 확인 가능. 컬럼 freeze(sticky)·컴팩트 32px 행높이는 여전히 미구현 |
-| 3 | VVD+POD 레벨에서 POD ETA/DEL ETA/Pick-Up CY/Return CY/Available Date/Last Free Date/Remarks 편집, 관련 B/L 전체에 자동 반영 | ⚠️ 주의 | `VesselArrivalGrid.tsx`가 모달 없이 인라인 편집 가능(POD ETA, DEL ETA, Available Date, Last Free Date, Form, Agent) — `store/arrival-notice-store.ts`의 `updateDraftEdit`/`saveGridEdits`로 Undo/Save 지원. 다만 **P/Up CY/CFS·Return CY는 읽기 전용**(`VesselArrivalGrid.tsx:23-24`, `editable` 플래그 없음)이고, **Remarks 컬럼 자체가 그리드에 없음**(`COLUMNS` 배열 미포함) |
+| 3 | VVD+POD 레벨에서 POD ETA/DEL ETA/Pick-Up CY/Return CY/Available Date/Last Free Date/Remarks 편집, 관련 B/L 전체에 자동 반영 | ⚠️ 주의 (2026-08-19 개선 확인) | `VesselArrivalGrid.tsx`가 모달 없이 인라인 편집 가능(POD ETA, DEL ETA, Available Date, Last Free Date, Form, Agent). 커밋 `5ea7475`(B/L Grid 인라인 편집 기능 추가) 이후 **P/Up CY/CFS·Return CY도 `editable: 'text'`로 편집 가능해짐**(`VesselArrivalGrid.tsx:23-24`) — 해소 완료. 다만 **Remarks 컬럼은 여전히 그리드에 없음**(`COLUMNS` 배열 미포함) |
 | 4 | Manifest 정보(MRN, MSN, Manifest SEQ No.) 표시, 누락 시 빨간색 강조 | ⚠️ 주의 | `ManifestVerificationStats.tsx`가 Import Manifest No. 누락 건수·목록(B/L·VVD)을 집계 표시하나, MRN/MSN 세부 필드는 데이터 모델(`types/arrival-notice.ts`)에 없음. `BLContactGrid.tsx:141`도 Import Manifest No.만 "—"로 표시할 뿐 **행 자체를 빨간색으로 강조하지는 않음** |
 | 5 | 고객명/주소 vs MDM 비교, Matched/AI Suggested/Unmatched/Wrong Input/Not Existed 배지 표시 | 📌 **ToBe 범위 제외 (사용자 확정 2026-08-13)** | 데이터 모델(`types/arrival-notice.ts:57-58`)·mock 데이터(`lib/mock-data.ts:88-91`)에는 값이 남아있으나, Code Validation 배지/신뢰도 점수 UI 노출은 이번 ToBe 스코프에서 불필요한 것으로 확정 — 구현 안 함 |
 
@@ -77,13 +77,19 @@
 - Story 1-3 전체(Parent-Child 다중 연락처 구조) → ToBe 범위 제외
 - Story 1-4 AC1(B/L 프리뷰) → ToBe 범위 제외
 
-**남은 ⚠️ 주의 항목 (우선순위 순):**
+**남은 ⚠️ 주의 항목 (우선순위 순, 2026-08-19 갱신):**
 1. Story 1-2 AC1: POD ETA 범위·Customer Code 등 필터 UI는 있으나 실제 필터링에 미반영
-2. Story 1-2 AC3: VVD 레벨 편집 중 P/Up CY/CFS·Return CY 읽기전용, Remarks 컬럼 부재
+2. Story 1-2 AC3: Remarks 컬럼이 Section 2 그리드에 없음 (P/Up CY/CFS·Return CY 읽기전용 문제는 2026-08-19 커밋 `5ea7475`로 해소됨)
 3. Story 1-2 AC4: Manifest 누락 행 자체의 빨간색 강조 없음, MRN/MSN 세부 필드 없음
 4. Story 1-4 AC3: Send 버튼이 Manifest/연락처 검증 통과 여부를 게이팅하지 않음
 
-Story 1-2 AC2(고밀도 배치·페이지네이션)는 2026-08-13에 `BLContactGrid.tsx`에 페이지네이션 바를 추가해 ⚠️ 주의로 개선 완료(컬럼 freeze·32px 행높이는 미구현으로 남음). 나머지 갭들에 대한 구현은 후속 작업으로 필요 시 별도 Plan을 통해 진행한다.
+Story 1-2 AC2(고밀도 배치·페이지네이션)는 2026-08-13에 `BLContactGrid.tsx`에 페이지네이션 바를 추가해 ⚠️ 주의로 개선 완료(컬럼 freeze·32px 행높이는 미구현으로 남음). 2026-08-19 조사(루트 MD 정리 과정)에서 추가로 다음 신규 위반이 확인됨 — 상세는 `.claude/rules/03-language-and-style.md`, `02-ui-ux-field-rules.md` 대조 결과 참조:
+5. Rule 03 위반: `TargetSelectorBar.tsx`의 경고 문구가 한국어로 하드코딩됨(영어 라벨 표준 미준수)
+6. Rule 02 위반: Section 2에서 VVD 컬럼이 스펙상 드롭다운 편집 대상이나 읽기전용으로 렌더링됨(`VesselArrivalGrid.tsx:17`)
+7. Rule 02 위반: `HUB`, `POD FIRMS`, `P/Up FIRMS` 필드가 타입/컬럼 정의 자체에 없어 Grid Configuration으로도 켤 수 없음
+8. Rule 02 위반: Bottom Bar의 `Preview Selected A/N`, `Validate Selected` 버튼에 핸들러 없음
+
+나머지 갭들에 대한 구현은 후속 작업으로 필요 시 별도 Plan을 통해 진행한다.
 
 ---
 

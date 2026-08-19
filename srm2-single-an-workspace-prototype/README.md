@@ -55,8 +55,6 @@ lib/
 └── mock-data.ts             # Mock B/L records for demo
 ```
 
-> **Note:** `HeaderNav.tsx`, `LeftPanel.tsx`, `RightPanel.tsx`, `ConfidenceBadge.tsx`, `StatusBadge.tsx`, `TopFilterBar.tsx` exist in `components/` but are not imported by `app/page.tsx` — they are leftovers from an earlier 2-panel design that predates the current 4-section architecture and are not part of the active workspace.
-
 ## Installation & Setup
 
 ```bash

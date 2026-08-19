@@ -10,15 +10,18 @@ The workspace MUST support rapid multi-B/L review and mass dispatch based on thr
 
 ## Column Visibility via Grid Configuration
 There is no fixed field-exclusion list. Every grid (Section 2, Section 4) exposes a **Grid Configuration** panel (gear icon) that lets the user show/hide and reorder columns at will — including legacy fields such as `HUB`, `DEL ETA`, `POD FIRMS`, `P/Up FIRMS`, `Agent`. Field visibility is a user preference, not a hardcoded UI rule.
+- The panel is titled `Grid Configuration` and lists every configurable column as a checkbox (labeled `Visible Columns` in Section 2, `Show / Hide Columns` in Section 4). Checking/unchecking toggles visibility immediately in the checklist; changes only apply to the grid once `Apply` is pressed. A `Reset` button restores the default column set/order.
+- As an alternate entry point, right-clicking any grid header or cell opens the same show/hide-and-reorder capability directly (grid hint text: "Right-click any header/cell in the grid to: Schedule & reorder columns (Grid Show/Hide and Moving)").
 
 ## 4-Section Consolidated Layout
 Organize the workspace into a vertical stack of four numbered sections plus a sticky bottom execution bar. No modal popups anywhere — all edits happen inline in the grids.
 
 1. **Section 1 — Select Targets by VVD + POD:**
+   - `Mandatory Search (choose one)` pill selector: `VVD + POD` / `POD ETA + POD` / `B/L No.` — exactly one combination must be the active search mode at a time.
    - VVD multi-tag selector (+ Add VVD), POD ETA date range, POD, B/L No. search
    - `Retrieve` / `Template` actions
    - Container Type toggle (All/DR/RF), Customer Type, A/N Status, DEL
-   - `+ More Filters` expandable chip row: T/S, POL, Customer Code, DEL, Customer Name, S/C No.
+   - Expandable chip row toggled by a single control: collapsed label is `+ More Filters`; expanded label becomes `+ Collapse Filters (N filters applied)`, where N is a live count of active chips among T/S, POL, Customer Code, DEL, Customer Name, S/C No. Active chips render highlighted (filled/pink); a `Reset` action at the end of the row clears them all.
 
 2. **Section 2 — Confirm & Set Vessel Arrival Info (edit directly in the grid, no popup):**
    - One row per selected VVD: SEQ, VVD, CNTR TYPE, POD ETA, DEL ETA, AVAILABLE DATE, LAST FREE TO PICK UP, P/Up CY/CFS, RETURN CY, FORM, AGENT, IMPORT MANIFEST NO
@@ -29,9 +32,11 @@ Organize the workspace into a vertical stack of four numbered sections plus a st
    - Manifest Matched / Manifest Missing (with offending B/L + VVD) / Total B/L across VVDs, computed live from the current filter result set
 
 4. **Section 4 — B/L Grid · Contact Roles · Batch Selection:**
-   - Send/E-Mail/Fax toggles, A/N Status filter, action toolbar (`Undo`, `Retrieve`, `Down Excel`, `Save`, `Code Validate`, `E-Mail`, `Preview`, `Print`, `History`)
+   - E-Mail/Fax checkboxes, A/N Status filter, action toolbar (`Undo`, `Retrieve`, `Down Excel`, `Save`, `Code Validate`, `E-Mail`, `Preview`, `Print`, `History`)
    - Fixed columns: SEQ, SEL, CHG, IMPORT MANIFEST NO, BL NO, TP, CODE, CUSTOMER NAME
    - Grid-Configuration-toggleable columns: A/N SENT, CNEE/NTFY, CNEE/NTFY #2, BROKER #1, BROKER #2, POD, DEL, TYPE, TERM, A/N FORM, LANGUAGE
+   - Below the grid: a footnote clarifies contact auto-mapping — `Contacts auto-mapped by Customer Code across N VVDs · CNEE = Consignee · NTFY = Notify Party`
+   - Grid footer includes pagination: `Items per page` selector plus a live `Total: N Records · Selected: X/Y` indicator
 
 5. **Bottom Execution Bar (sticky):**
    - `Selected X / Y B/L` counter, `Preview Selected A/N`, `Validate Selected`, primary action `Send Arrival Notice (N)`

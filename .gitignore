@@ -22,6 +22,7 @@ yarn.lock
 dist/
 build/
 .next/
+*.tsbuildinfo
 
 # 임시 파일
 *.tmp

@@ -6,7 +6,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "/", label: "홈" },
   { href: "/about", label: "소개" },
-  { href: "/contact", label: "문의" },
+  { href: "/examples", label: "예제" },
 ]
 
 export { navItems }

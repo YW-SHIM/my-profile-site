@@ -69,6 +69,11 @@ Next.js App Router 프로젝트. `src/` 없음 — `app/`, `components/`, `lib/`
 - **React Hook Form + Zod v4 + `@hookform/resolvers`**: 폼 검증.
 - **`sonner`**: 토스트 알림. `<Toaster />`는 `app/layout.tsx`에 마운트되어 있음.
 
+### Next.js 16 전역 타입
+
+`next dev` 또는 `next build` 실행 시 `.next/types/`·`.next/dev/types/`에 라우트별 타입이 자동 생성된다.
+`LayoutProps<"/">`, `PageProps` 등은 import 없이 전역에서 사용 가능하며, **첫 `npm run dev` 전에는 해당 타입이 없어 타입 오류가 발생**한다.
+
 ### CSS / 테마
 
 Tailwind v4, CSS-first — `tailwind.config.js` 없음. 테마 토큰·CSS 변수는 `app/globals.css` (`@theme inline`, `:root`, `.dark`).

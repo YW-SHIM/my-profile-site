@@ -36,6 +36,12 @@
 
 (예: srm2 프로젝트 → `D:\work\SRM2-SINGLE-AN-WORKSPACE.PROTOTYPE\`가 대상 폴더이며, 이미 `USER-STORY-VERIFICATION-REPORT.md`에서 검증 완료됨.)
 
+## 공통 템플릿
+
+`templates/` 폴더에는 프로젝트 간 공통으로 재사용 가능한 프롬프트 템플릿이 있습니다.
+- `google-drive-analysis-agent.md` — Google Drive MCP 분석 agent 프롬프트 템플릿
+  (`{{PROJECT_NAME}}`, `{{ANALYSIS_GOAL}}` 교체 후 사용)
+
 ## 유지보수 지침
 
 `my-workspace` 하위에 새 프로젝트 폴더를 생성할 때는, 작업을 마치기 전에 이 문서의

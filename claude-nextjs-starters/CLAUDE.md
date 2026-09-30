@@ -67,6 +67,17 @@ rather than an effect + `setState`, to satisfy the `react-hooks/set-state-in-eff
 for client state (no store exists yet — add a slice under a new `store/` dir only when a feature
 actually needs shared state), `react-hook-form` + `zod` + `@hookform/resolvers` for forms.
 
+## Workflow
+
+- 코드 구현(기능 추가, 버그 수정, 리팩터링)을 마치면 커밋/완료 보고 전에 `code-reviewer` 서브에이전트
+  (`.claude/agents/code-reviewer.md`)를 실행해 리뷰를 받는다. 리뷰어는 읽기 전용이며, 지적 사항 수정은 메인 세션에서 처리한다.
+
+## Playwright MCP
+
+- 프로젝트 단위 MCP 설정은 루트의 `.mcp.json`에 있다 (`playwright` 서버, `npx @playwright/mcp@latest`, stdio). 팀과 공유되므로 커밋 대상이다.
+- 개인별 활성화는 `.claude/settings.local.json`의 `enabledMcpjsonServers: ["playwright"]`로 한다. 이 파일은 gitignore 대상이라 커밋되지 않으므로, 새 환경에서는 직접 만들거나 승인 프롬프트에서 허용한다.
+- UI 변경 검증 시 `npm run dev`로 서버를 띄운 뒤 `mcp__playwright__*` 도구로 확인한다. 반응형 확인은 `md` 브레이크포인트(768px) 전후로 `browser_resize`를 사용한다.
+
 ## Conventions
 
 - No `any` — this is enforced by convention/review, not by an eslint rule in this config; check with

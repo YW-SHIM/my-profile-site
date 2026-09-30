@@ -14,10 +14,7 @@ npm run lint     # ESLint 검사
 
 ## Architecture
 
-### 핵심 설계 원칙
-- **5→1 화면 통합**: 5개 레거시 OPUS 화면(`ESM_BKG_1054`, `ESM_BKG_0672`×3, `ESM_BKG_0381`)을 단일 워크스페이스로 통합
-- **모달 팝업 없음**: 모든 편집은 그리드 인라인(드롭다운, 날짜피커, 텍스트)으로 처리
-- **도메인 스펙은 `.claude/rules/` 가 유일한 근거**: `01~04-*.md` 파일이 UI 레이아웃·필드·레이블·타입 정의의 권위 있는 명세
+설계 원칙·UI 레이아웃·필드 명세는 `.claude/rules/01~04-*.md`가 유일한 권위 있는 근거입니다.
 
 ### 데이터 흐름
 
@@ -29,16 +26,6 @@ lib/mock-data.ts  →  store/arrival-notice-store.ts  →  app/page.tsx  →  co
 - **단일 Zustand 스토어** (`store/arrival-notice-store.ts`): 레코드 목록, 필터 상태, 행 선택, Section 2 draftEdits(Undo/Save 전 임시 편집값)를 모두 관리
 - `retrieveRecords()` 호출 시 `applyFilters()`가 실행되어 `filteredRecords` 갱신
 - Section 2 인라인 편집은 `draftEdits` 맵에만 반영되다가 `saveGridEdits()` 호출 시 `records`에 반영됨
-
-### 컴포넌트 구조 (4-Section 수직 레이아웃)
-
-| 컴포넌트 | Section | 역할 |
-|---|---|---|
-| `TargetSelectorBar` | 1 | VVD 멀티태그·POD ETA·POD·B/L No. 검색, More Filters 칩 행 |
-| `VesselArrivalGrid` | 2 | VVD별 도착정보 인라인 편집 그리드, Grid Configuration 패널 |
-| `ManifestVerificationStats` | 3 | Manifest Matched/Missing/Total 라이브 집계 |
-| `BLContactGrid` | 4 | B/L 목록·연락처 역할·배치 선택, 페이지네이션 |
-| `BottomExecutionBar` | sticky | 선택 건수 표시, `Send Arrival Notice (N)` 실행 |
 
 ### 타입 시스템
 

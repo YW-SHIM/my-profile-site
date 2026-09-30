@@ -100,18 +100,9 @@ Sample B/L records are provided in `lib/mock-data.ts`, covering multiple VVDs/PO
 - Manages record list, filters, per-row selection state
 - `approveAndMassSendArrivalNotices()` – dispatches all selected B/Ls in one action (Section 4 + Bottom Bar)
 
-## Known Gaps (see `USER-STORY-VERIFICATION-REPORT.md` for details)
+## Known Gaps
 
-- POD ETA range / Customer Code filters are not yet wired into `applyFilters`
-- Manifest-missing rows have no visual (red) highlight in Section 4
-- `Send Arrival Notice` is not gated on manifest/contact validation passing
-- Bottom bar's `Preview Selected A/N` and `Validate Selected` buttons have no handler yet
-
-## Development Notes
-
-- All UI labels should use clear, straightforward English per Rule 03
-- DDD principles applied: `ArrivalNotice` as aggregate root
-- No modal popups anywhere — all edits happen inline in the grids, per Rule 01
+세부 항목은 `USER-STORY-VERIFICATION-REPORT.md` 참조.
 
 ## License
 

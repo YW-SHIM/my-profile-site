@@ -11,77 +11,84 @@ npm run dev      # Turbopack dev server (http://localhost:3000, auto-picks anoth
 npm run build    # production build (Turbopack, includes TypeScript type-check)
 npm run start    # serve the production build
 npm run lint     # eslint (flat config, eslint-config-next core-web-vitals + typescript)
+npx tsc --noEmit # standalone type-check without emitting files
 ```
 
-There is no test suite/script configured in this repo. There is also no standalone typecheck
-script — `npx tsc --noEmit` or `npm run build` is how type errors surface.
+이 저장소에는 테스트 스크립트가 없다. 타입 오류는 `npx tsc --noEmit` 또는 `npm run build`로 확인한다.
 
-Adding a shadcn/ui component: `npx shadcn@latest add <name> -y` (writes into `components/ui/`).
-Use `npx shadcn@latest view <name>` to inspect a registry entry before adding it if unsure it exists.
+shadcn/ui 컴포넌트 추가: `npx shadcn@latest add <name> -y` (→ `components/ui/`).
+추가 전 확인: `npx shadcn@latest view <name>`.
+
+## 주요 패키지 버전 (breaking change 주의)
+
+| 패키지 | 버전 | 주의사항 |
+|--------|------|----------|
+| `next` | `^16.3.6` | AGENTS.md 경고 참조 — 기존 지식과 API가 다를 수 있음. 의심스러우면 `node_modules/next/dist/docs/` 확인 |
+| `react` | `19.2.8` | |
+| `zod` | `^4.6.5` | v3 대비 `.optional()` / `.nullable()` 동작, `z.object()` 등 API 변경. 공식 마이그레이션 가이드 필수 |
+| `zustand` | `^5.0.15` | v4 대비 미들웨어·슬라이스 패턴 변경. 스토어가 아직 없으므로 추가 시 v5 공식 문서 기준으로 작성 |
+| `@base-ui/react` | `^1.8.0` | shadcn/ui 프리미티브로 사용. Radix UI와 API가 다름 |
 
 ## Architecture
 
-Next.js App Router project, no `src/` directory — `app/`, `components/`, `lib/` all live at repo
-root. Path alias `@/*` → repo root (`tsconfig.json`).
+Next.js App Router 프로젝트. `src/` 없음 — `app/`, `components/`, `lib/` 모두 repo 루트에 위치. Path alias `@/*` → repo 루트 (`tsconfig.json`).
 
-**This is not a stock shadcn/ui setup — read before touching `components/ui/` or writing new UI code:**
-- `components.json` uses `"style": "base-nova"`. Primitives are built on **`@base-ui/react`**
-  (e.g. `components/ui/button.tsx` imports `Button as ButtonPrimitive` from `@base-ui/react/button`),
-  **not Radix UI**. Prop shapes, data attributes (`data-open`, `data-ending-style`, etc.) and the
-  `render` prop pattern (e.g. `<AlertDialogTrigger render={<Button variant="destructive" />}>`) come
-  from Base UI's API, not Radix's.
-- `cn()` (`lib/utils.ts`) re-exports the `cn` npm package (shadcn's own drop-in replacement for
-  clsx + tailwind-merge), not a hand-rolled utility.
-- The classic shadcn `form` wrapper component **does not exist in this registry** — it was replaced
-  by a `<Field />` family (`components/ui/field.tsx`: `FieldLabel`, `FieldError`, `FieldGroup`, etc.)
-  meant to be combined directly with React Hook Form's `<Controller />` + `zodResolver`. Don't try to
-  `npx shadcn add form` — it's a no-op in this registry.
-- Some generated components already wrap `Button` internally and accept `variant`/`size` directly
-  (e.g. `AlertDialogAction`, `AlertDialogCancel`) — don't re-wrap them in another `<Button>` or pass
-  them a `render` prop; only bare primitives like `AlertDialogTrigger`/`SheetTrigger` need `render`.
-- Tailwind v4, CSS-first config — no `tailwind.config.js`. Theme tokens/CSS vars live in
-  `app/globals.css` (`@theme inline`, `:root`, `.dark`), generated/updated by `shadcn init`.
+### 이 프로젝트의 shadcn/ui는 표준 설정이 아님
 
-**Component layering** (bottom → top), enforced by folder, not by lint rule:
-- `components/ui/` — shadcn/Base UI CLI output only. Treat as vendored; avoid hand-editing beyond
-  what the CLI generates, so `shadcn diff`/re-adds stay meaningful.
-- `components/common/` — small reusable pieces composed from `ui/` (`ThemeToggle`, `Logo`, `NavLink`).
-- `components/layout/` — app-shell structural components (`Header`, `Footer`, `MobileNav`,
-  `Container`, `PageWrapper`) composed from `common/` + `ui/`.
-- `components/providers/` — app-wide context wiring (`ThemeProvider`, wrapping `next-themes`).
-- `app/**/page.tsx` — route-level composition of the above.
+`components.json`의 `"style": "base-nova"`. 프리미티브는 **Radix UI가 아닌 `@base-ui/react`** 기반.
 
-**Single source of truth for navigation**: `components/layout/nav-items.ts` exports `navItems`,
-consumed identically by `Header.tsx` (desktop nav), `Footer.tsx`, and `MobileNav.tsx` (mobile Sheet).
-Adding/removing a nav entry here changes all three surfaces at once — but a `href` only works if a
-matching `app/<path>/page.tsx` actually exists; nothing else (no middleware/proxy, no redirects in
-`next.config.ts`, no catch-all routes) resolves a route implicitly.
+- `render` prop 패턴 사용: `<AlertDialogTrigger render={<Button variant="destructive" />}>`
+- `data-open`, `data-ending-style` 등 Base UI 전용 data attribute 사용
+- `AlertDialogAction`, `AlertDialogCancel` 등 이미 `Button`을 내부에 감싼 컴포넌트를 다시 `<Button>`으로 감싸지 않는다
+- `cn()` (`lib/utils.ts`) → `cn` npm 패키지 (clsx + tailwind-merge 대체)
+- classic shadcn `form` 래퍼 컴포넌트 없음 → **`<Field />` 계열** (`components/ui/field.tsx`: `FieldLabel`, `FieldError`, `FieldGroup` 등) + React Hook Form `<Controller />` + `zodResolver` 조합
 
-**Dark mode**: `next-themes`, wired via `components/providers/ThemeProvider.tsx` into
-`app/layout.tsx`. `<html>` has `suppressHydrationWarning` (required because next-themes sets the
-`class` attribute via an inline script before hydration). Client components that need to know the
-resolved theme before paint (e.g. `ThemeToggle`) should read mount state via `useSyncExternalStore`
-rather than an effect + `setState`, to satisfy the `react-hooks/set-state-in-effect` lint rule.
+### 컴포넌트 계층 (하위 → 상위)
 
-**State/forms stack** (installed, no wrapper libraries beyond shadcn's own `field.tsx`): `zustand`
-for client state (no store exists yet — add a slice under a new `store/` dir only when a feature
-actually needs shared state), `react-hook-form` + `zod` + `@hookform/resolvers` for forms.
+| 폴더 | 역할 |
+|------|------|
+| `components/ui/` | shadcn CLI 출력물. vendored 취급 — 직접 수정 최소화 |
+| `components/common/` | `ui/`를 조합한 소형 재사용 컴포넌트 (`ThemeToggle`, `Logo`, `NavLink`) |
+| `components/layout/` | 앱 셸 구조 컴포넌트 (`Header`, `Footer`, `MobileNav`, `Container`, `PageWrapper`) |
+| `components/providers/` | 앱 전역 컨텍스트 (`ThemeProvider` — `next-themes` 래핑) |
+| `app/**/page.tsx` | 라우트 단위 컴포지션 |
+
+### 네비게이션
+
+**단일 정보 소스**: `components/layout/nav-items.ts`의 `navItems` → `Header.tsx`(데스크톱), `Footer.tsx`, `MobileNav.tsx` 세 곳이 동일하게 소비.  
+항목을 추가할 때 대응하는 `app/<path>/page.tsx`가 반드시 존재해야 한다. 미들웨어·프록시·catch-all 라우트가 없으므로 파일이 없으면 404.
+
+### 다크 모드
+
+`next-themes` → `ThemeProvider` → `app/layout.tsx`. `<html>`에 `suppressHydrationWarning` 필수.  
+마운트 전 테마를 읽어야 하는 클라이언트 컴포넌트는 effect + setState가 아닌 `useSyncExternalStore`를 사용한다 (`react-hooks/set-state-in-effect` lint rule).
+
+### 상태·폼·토스트
+
+- **Zustand v5**: 클라이언트 전역 상태. 스토어 없음 — 기능이 실제로 필요할 때 `store/` 아래 슬라이스로 추가.
+- **React Hook Form + Zod v4 + `@hookform/resolvers`**: 폼 검증.
+- **`sonner`**: 토스트 알림. `<Toaster />`는 `app/layout.tsx`에 마운트되어 있음.
+
+### CSS / 테마
+
+Tailwind v4, CSS-first — `tailwind.config.js` 없음. 테마 토큰·CSS 변수는 `app/globals.css` (`@theme inline`, `:root`, `.dark`).
 
 ## Workflow
 
-- 코드 구현(기능 추가, 버그 수정, 리팩터링)을 마치면 커밋/완료 보고 전에 `code-reviewer` 서브에이전트
-  (`.claude/agents/code-reviewer.md`)를 실행해 리뷰를 받는다. 리뷰어는 읽기 전용이며, 지적 사항 수정은 메인 세션에서 처리한다.
+코드 구현(기능 추가·버그 수정·리팩터링)을 마치면 **커밋 전에** `.claude/agents/code-reviewer.md` 서브에이전트를 실행해 리뷰를 받는다. 리뷰어는 읽기 전용이며, 지적 사항 수정은 메인 세션에서 처리한다.
 
 ## Playwright MCP
 
-- 프로젝트 단위 MCP 설정은 루트의 `.mcp.json`에 있다 (`playwright` 서버, `npx @playwright/mcp@latest`, stdio). 팀과 공유되므로 커밋 대상이다.
-- 개인별 활성화는 `.claude/settings.local.json`의 `enabledMcpjsonServers: ["playwright"]`로 한다. 이 파일은 gitignore 대상이라 커밋되지 않으므로, 새 환경에서는 직접 만들거나 승인 프롬프트에서 허용한다.
-- UI 변경 검증 시 `npm run dev`로 서버를 띄운 뒤 `mcp__playwright__*` 도구로 확인한다. 반응형 확인은 `md` 브레이크포인트(768px) 전후로 `browser_resize`를 사용한다.
+- 프로젝트 공유 설정: 루트 `.mcp.json` (`playwright` 서버, `npx @playwright/mcp@latest`, stdio). 커밋 대상.
+- 개인 활성화: `.claude/settings.local.json`의 `enabledMcpjsonServers: ["playwright"]`. gitignore 대상.
+- UI 변경 검증 시 `npm run dev`로 서버를 띄운 뒤 `mcp__playwright__*` 도구로 확인.
+- 반응형 확인: `md` 브레이크포인트(768px) 전후로 `browser_resize` 사용.
+- `.playwright-mcp/`: MCP가 생성하는 런타임 아티팩트(로그·스크린샷). gitignore 적용됨.
 
 ## Conventions
 
-- No `any` — this is enforced by convention/review, not by an eslint rule in this config; check with
-  `grep -rn ": any" components/ app/ lib/` before considering work done.
-- 2-space indentation, camelCase functions/variables, PascalCase components.
-- Everything must be responsive; the mobile nav breakpoint is `md` (`hidden md:flex` / `md:hidden`
-  pairs in `Header.tsx`/`MobileNav.tsx`).
+- `any` 타입 금지 — `grep -rn ": any" components/ app/ lib/`로 커밋 전 확인.
+- 2칸 들여쓰기, camelCase 함수/변수, PascalCase 컴포넌트.
+- 코드 주석 한국어, 변수명/함수명 영어.
+- 모바일 네비 브레이크포인트: `md` (`hidden md:flex` / `md:hidden`).
+- 모든 UI는 반응형 필수.

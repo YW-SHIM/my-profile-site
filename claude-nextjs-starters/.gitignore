@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# playwright mcp 런타임 아티팩트 (로그, 스크린샷)
+.playwright-mcp/
